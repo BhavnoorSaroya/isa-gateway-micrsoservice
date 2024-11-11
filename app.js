@@ -16,20 +16,20 @@ const testingMode = false; // Set to true if running in testing mode
 const UPMS_URL = testingMode ? 'http://localhost:5001' : 'https://isa-database-microservice.onrender.com';
 const AUTH_URL = testingMode ? 'http://localhost:5000' : 'https://auth-microservice-of4o.onrender.com';
 const FRONTEND_URL = testingMode ? 'http://localhost:8080' : 'https://isa-facade.azurewebsites.net';
-const AI_URL = testingMode ? 'http://localhost:8081' : 'https://coming-soon.azurewebsites.net';
+const AI_URL = testingMode ? 'http://localhost:8081' : 'https://ai-microservice-x34z.onrender.com';
 
 // List of public routes that don't need authentication
-const publicRoutes =   ['/login',
-                        '/password-reset', 
-                        '/register',
-                        '/reset',
-                        '/forgot-password',
-                        '/forgot',
-                        '/',
-                        '/message',
-                        '/favicon.ico',
-                    ];
-                        
+const publicRoutes = ['/login',
+    '/password-reset',
+    '/register',
+    '/reset',
+    '/forgot-password',
+    '/forgot',
+    '/',
+    '/message',
+    '/favicon.ico',
+];
+
 // List of routes that we allow auth within header rather than cookie
 const headerAuthRoutes = ['/reset-password', '/password-reset'];
 
@@ -64,9 +64,9 @@ function verifyToken(req, res, next) {
             if (err) {
                 console.log('invalid token');
                 return res.status(403).send('Invalid Token');
-                
+
             }
-            
+
             if (decoded == undefined) {
                 return res.status(403).send('Invalid Token');
             }
@@ -74,18 +74,18 @@ function verifyToken(req, res, next) {
             req.headers['x-user-email'] = decoded.email; // Include the email from the JWT payload
             const email = decoded.email;
             // console.log('verified email is: ' + decoded.email);
-            
+
         });
         // console.log('final print');
         // console.log(email);
         return next();
-    } else{
+    } else {
         console.log('standard auth route');
-        
+
     }
 
-    
-   
+
+
     if (!token) {
         return res.status(401).send('Access Denied: No Token Provided! this two');
     }
@@ -190,7 +190,7 @@ app.get('/register', createProxyMiddleware({
 app.get('/message', createProxyMiddleware({
     target: FRONTEND_URL,
     changeOrigin: true,
-    pathRewrite: { '^/message': '/message'},
+    pathRewrite: { '^/message': '/message' },
 }));
 
 
@@ -205,6 +205,11 @@ app.get('/favicon.ico', createProxyMiddleware({
     pathRewrite: { '^/favicon.ico': '/favicon.ico' },
 }));
 
+app.post('/detect', createProxyMiddleware({
+    target: AI_URL,
+    changeOrigin: true,
+    pathRewrite: { '^/detect': '/detect' }
+}))
 
 // Start the server
 app.listen(8080, () => {
