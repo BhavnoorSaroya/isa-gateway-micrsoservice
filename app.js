@@ -81,7 +81,7 @@ function verifyToken(req, res, next) {
         return next();
     } else {
         console.log('standard auth route');
-
+        console.log(req.path)
     }
 
 
@@ -211,6 +211,23 @@ app.post('/detect', createProxyMiddleware({
     pathRewrite: { '^/detect': '/detect' }
 }))
 
+app.get('/detect', createProxyMiddleware({
+    target: FRONTEND_URL,
+    changeOrigin: true,
+    pathRewrite: { '^/detect': '/detect' }
+}))
+
+app.get('/admin', createProxyMiddleware({
+    target: FRONTEND_URL,
+    changeOrigin: true,
+    pathRewrite: { '^/admin': '/admin' }
+}))
+
+app.post('/query', createProxyMiddleware({
+    target: UPMS_URL,
+    changeOrigin: true,
+    pathRewrite: { '^/query': '/query' }
+}))
 // Start the server
 app.listen(8080, () => {
     console.log('API Gateway with Authentication is running on http://localhost:3000');
