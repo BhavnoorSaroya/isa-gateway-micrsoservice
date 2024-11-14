@@ -7,10 +7,11 @@ const cookie = require('cookie');
 const e = require('express');
 const { json } = require('body-parser');
 
+const PORT = 8080;
 const app = express();
-const publicKey = fs.readFileSync('public.pem'); // Load your public key
+const publicKey = fs.readFileSync('public.pem');
 const privateKey = fs.readFileSync('private_signer_key.pem', 'utf8');
-const testingMode = false; // Set to true if running in testing mode
+const testingMode = false;
 
 // URLs for services
 const UPMS_URL = testingMode ? 'http://localhost:5001' : 'https://isa-database-microservice.onrender.com';
@@ -229,6 +230,6 @@ app.post('/query', createProxyMiddleware({
     pathRewrite: { '^/query': '/query' }
 }))
 // Start the server
-app.listen(8080, () => {
-    console.log('API Gateway with Authentication is running on http://localhost:3000');
+app.listen(PORT, () => {
+    console.log(`API Gateway with Authentication is running on port ${PORT}`);
 });
