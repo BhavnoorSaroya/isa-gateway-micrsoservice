@@ -18,6 +18,7 @@ const UPMS_URL = testingMode ? 'http://localhost:5001' : 'https://isa-database-m
 const AUTH_URL = testingMode ? 'http://localhost:5000' : 'https://auth-microservice-of4o.onrender.com';
 const FRONTEND_URL = testingMode ? 'http://localhost:8080' : 'https://isa-facade.azurewebsites.net';
 const AI_URL = testingMode ? 'http://localhost:8081' : 'https://ai-microservice-x34z.onrender.com';
+const DOCS_URL = testingMode ? 'http://localhost:8082' : 'https://swagger-docs.azurewebsites.net';
 
 // List of public routes that don't need authentication
 const publicRoutes = ['/login',
@@ -29,6 +30,13 @@ const publicRoutes = ['/login',
     '/',
     '/message',
     '/favicon.ico',
+    '/docs',
+    '/docs/',
+    '/docs/favicon-32x32.png',
+    '/docs/swagger-ui-standalone-preset.js', 
+    '/docs/swagger-ui-bundle.js', 
+    '/docs/swagger-ui.css', 
+    '/api-docs',
 ];
 
 // List of routes that we allow auth within header rather than cookie
@@ -229,6 +237,45 @@ app.post('/query', createProxyMiddleware({
     changeOrigin: true,
     pathRewrite: { '^/query': '/query' }
 }))
+
+app.get('/docs', createProxyMiddleware({
+    target: DOCS_URL,
+    changeOrigin: true,
+    pathRewrite: { '^/docs': '/docs' }
+}));
+app.get('/docs/swagger-ui.css', createProxyMiddleware({
+    target: DOCS_URL,
+    changeOrigin: true,
+    pathRewrite: { '^/docs/swagger-ui.css': '/docs/swagger-ui.css' }
+}));
+app.get('/docs/favicon-32x32.png', createProxyMiddleware({
+    target: DOCS_URL,
+    changeOrigin: true,
+    pathRewrite: { '^/docs/favicon-32x32.png': '/docs/favicon-32x32.png' }
+}));
+app.get('/docs/swagger-ui-standalone-preset.js', createProxyMiddleware({
+    target: DOCS_URL,
+    changeOrigin: true,
+    pathRewrite: { '^/docs/swagger-ui-standalone-preset.js': '/docs/swagger-ui-standalone-preset.js' }
+}));
+app.get('/docs/swagger-ui-bundle.js', createProxyMiddleware({
+    target: DOCS_URL,
+    changeOrigin: true,
+    pathRewrite: { '^/docs/swagger-ui-bundle.js': '/docs/swagger-ui-bundle.js' }
+}))
+app.get('/api-docs', createProxyMiddleware({
+    target: DOCS_URL,
+    changeOrigin: true,
+    pathRewrite: { '^/api-docs': '/api-docs' }
+}))
+
+// '/favicon-32x32.png',
+// '/swagger-ui-standalone-preset.js', 
+// '/swagger-ui-bundle.js', 
+// '/swagger-ui.css', 
+
+
+
 // Start the server
 app.listen(PORT, () => {
     console.log(`API Gateway with Authentication is running on port ${PORT}`);
