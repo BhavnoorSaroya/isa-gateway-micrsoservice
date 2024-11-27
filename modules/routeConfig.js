@@ -3,7 +3,7 @@ const { createProxyMiddleware } = require('http-proxy-middleware');
 class RouteConfig {
   constructor(middleware) {
     this.middleware = middleware;
-    this.testingMode = true;
+    this.testingMode = false;
     this.setupUrls();
   }
 
