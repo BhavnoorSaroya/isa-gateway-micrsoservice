@@ -1,32 +1,27 @@
-// server.js
 const express = require('express');
-const fs = require('fs');
-const verifyToken = require('./verifyToken');
-const signRequest = require('./signRequest');
-const routes = require('./routes');
+const cookieParser = require('cookie-parser');
+const Middleware = require('./middleware');
+const RouteConfig = require('./routeConfig');
 
 class Server {
   constructor(port) {
     this.app = express();
     this.port = port;
-    this.loadKeys();
+    this.middleware = new Middleware();
+    this.routeConfig = new RouteConfig(this.middleware);
     this.setupMiddlewares();
     this.setupRoutes();
   }
 
-  loadKeys() {
-    this.publicKey = fs.readFileSync(process.env.PUBLIC_KEY_PATH || 'public.pem', 'utf8');
-    this.privateKey = fs.readFileSync(process.env.PRIVATE_KEY_PATH || 'private.pem', 'utf8');
-  }
-
   setupMiddlewares() {
+    this.app.use(cookieParser());
     this.app.use(express.json());
-    this.app.use(signRequest(this.privateKey));
-    this.app.use(verifyToken(this.publicKey));
+    this.app.use(this.middleware.signRequest.bind(this.middleware));
+    this.app.use(this.middleware.verifyToken.bind(this.middleware));
   }
 
   setupRoutes() {
-    this.app.use('/', routes);
+    this.routeConfig.configureRoutes(this.app);
   }
 
   start() {
@@ -37,4 +32,3 @@ class Server {
 }
 
 module.exports = Server;
-

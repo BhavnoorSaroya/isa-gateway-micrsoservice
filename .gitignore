@@ -1,4 +1,4 @@
 public.pem
 private_signer_key.pem
 index.html
-/node_modules/
+node_modules/
