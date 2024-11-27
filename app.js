@@ -4,13 +4,11 @@ const { createProxyMiddleware } = require('http-proxy-middleware');
 const fs = require('fs');
 const crypto = require('crypto');
 const cookie = require('cookie');
-const e = require('express');
-const { json } = require('body-parser');
 
 const app = express();
-const publicKey = fs.readFileSync('public.pem'); // Load your public key
+const publicKey = fs.readFileSync('public.pem');
 const privateKey = fs.readFileSync('private_signer_key.pem', 'utf8');
-const testingMode = false; // Set to true if running in testing mode
+const testingMode = true; // Set to true if running in testing mode
 
 // URLs for services
 const UPMS_URL = testingMode ? 'http://localhost:5001' : 'https://isa-database-microservice.onrender.com';
@@ -30,7 +28,7 @@ const publicRoutes = ['/login',
     '/favicon.ico',
 ];
 
-// List of routes that we allow auth within header rather than cookie
+// List of routes that we allow auth within header rather than cookies
 const headerAuthRoutes = ['/reset-password', '/password-reset'];
 
 // Static files do not require JWT verification
@@ -213,5 +211,5 @@ app.post('/detect', createProxyMiddleware({
 
 // Start the server
 app.listen(8080, () => {
-    console.log('API Gateway with Authentication is running on http://localhost:3000');
+    console.log('API Gateway with Authentication is running on http://localhost:8080');
 });
