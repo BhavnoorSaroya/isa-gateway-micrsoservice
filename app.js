@@ -286,6 +286,15 @@ app.get('/docs', createProxyMiddleware({
   changeOrigin: true,
   pathRewrite: { '^/docs': '/docs' }
 }));
+
+app.get('/API/v1/docs/', createProxyMiddleware({
+    target: DOCS_URL,
+    changeOrigin: true,
+    pathRewrite: { '^/API/v1/docs/': '/docs' }
+  }));
+
+// https://isa-singh.azurewebsites.net/API/v1/docs/
+
 app.get('/docs/swagger-ui.css', createProxyMiddleware({
   target: DOCS_URL,
   changeOrigin: true,
