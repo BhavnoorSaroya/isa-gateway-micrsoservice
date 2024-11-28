@@ -5,7 +5,7 @@ const fs = require('fs');
 const crypto = require('crypto');
 const cookie = require('cookie');
 
-const PORT = 8000;
+const PORT = 8080;
 const app = express();
 const publicKey = fs.readFileSync('public.pem');
 const privateKey = fs.readFileSync('private_signer_key.pem', 'utf8');
@@ -246,6 +246,19 @@ app.post('/query', createProxyMiddleware({
   changeOrigin: true,
   pathRewrite: { '^/query': '/query' }
 }))
+
+app.delete('/delete', createProxyMiddleware({ 
+    target: UPMS_URL,
+    changeOrigin: true,
+    pathRewrite: { '^/delete': '/delete' }
+  }))
+
+app.put('/update-usage', createProxyMiddleware({ 
+        target: UPMS_URL,
+        changeOrigin: true,
+        pathRewrite: { '^/update-usage': '/update-usage' }
+      })
+)
 
 app.get('/docs', createProxyMiddleware({
   target: DOCS_URL,
