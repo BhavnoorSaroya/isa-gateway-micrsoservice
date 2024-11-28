@@ -18,6 +18,9 @@ const FRONTEND_URL = testingMode ? 'http://localhost:8080' : 'https://isa-facade
 const AI_URL = testingMode ? 'http://localhost:5002' : 'https://ai-microservice-x34z.onrender.com';
 const DOCS_URL = testingMode ? 'http://localhost:8082' : 'https://swagger-docs.azurewebsites.net';
 
+// Usage counter object
+const usageCounters = {};
+
 // List of public routes that don't need authentication
 const publicRoutes = ['/login',
   '/reset',
@@ -46,6 +49,18 @@ app.use('/static', createProxyMiddleware({
   changeOrigin: true,
   pathRewrite: { '^/static': '/static' },
 }));
+
+// Middleware to track usage
+app.use((req, res, next) => {
+    const endpoint = req.path;
+    usageCounters[endpoint] = (usageCounters[endpoint] || 0) + 1;
+    next();
+  });
+
+// Add a `/usage-data` endpoint
+app.get('/usage-data', (req, res) => {
+    res.json(usageCounters);
+  });
 
 
 // Middleware for JWT validation
@@ -239,6 +254,12 @@ app.get('/admin', createProxyMiddleware({
   target: FRONTEND_URL,
   changeOrigin: true,
   pathRewrite: { '^/admin': '/admin' }
+}))
+
+app.get('/usage', createProxyMiddleware({
+    target: FRONTEND_URL,
+    changeOrigin: true,
+    pathRewrite: { '^/usage': '/usage' }
 }))
 
 app.post('/query', createProxyMiddleware({
