@@ -247,7 +247,7 @@ app.get('/video', createProxyMiddleware({
 app.get('/video-feed', createProxyMiddleware({
   target: AI_URL,
   changeOrigin: true,
-  pathRewrite: { '^/video': '/video' }
+  pathRewrite: { '^/video-feed': '/video-feed' }
 }))
 
 app.get('/admin', createProxyMiddleware({
@@ -286,6 +286,13 @@ app.get('/docs', createProxyMiddleware({
   changeOrigin: true,
   pathRewrite: { '^/docs': '/docs' }
 }));
+
+app.get('/API/v1/docs/*', createProxyMiddleware({
+    target: DOCS_URL,
+    changeOrigin: true,
+    pathRewrite: (path, req) => path.replace('/API/v1/docs/', '/docs/')
+  }));
+  
 
 app.get('/API/v1/docs/', createProxyMiddleware({
     target: DOCS_URL,
