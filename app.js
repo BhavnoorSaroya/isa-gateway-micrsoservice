@@ -15,7 +15,7 @@ const testingMode = false;
 const UPMS_URL = testingMode ? 'http://localhost:5001' : 'https://isa-database-microservice.onrender.com';
 const AUTH_URL = testingMode ? 'http://localhost:5000' : 'https://auth-microservice-of4o.onrender.com';
 const FRONTEND_URL = testingMode ? 'http://localhost:8080' : 'https://isa-facade.azurewebsites.net';
-const AI_URL = testingMode ? 'http://localhost:5002' : 'https://ai-microservice-x34z.onrender.com';
+const AI_URL = testingMode ? 'http://localhost:5002' : 'https://e64f-2604-3d08-607f-b5c0-5ff-f691-d66-e487.ngrok-free.app';
 const DOCS_URL = testingMode ? 'http://localhost:8082' : 'https://swagger-docs.azurewebsites.net';
 
 // Usage counter object
@@ -52,15 +52,15 @@ app.use('/static', createProxyMiddleware({
 
 // Middleware to track usage
 app.use((req, res, next) => {
-    const endpoint = req.path;
-    usageCounters[endpoint] = (usageCounters[endpoint] || 0) + 1;
-    next();
-  });
+  const endpoint = req.path;
+  usageCounters[endpoint] = (usageCounters[endpoint] || 0) + 1;
+  next();
+});
 
 // Add a `/usage-data` endpoint
 app.get('/usage-data', (req, res) => {
-    res.json(usageCounters);
-  });
+  res.json(usageCounters);
+});
 
 
 // Middleware for JWT validation
@@ -257,9 +257,9 @@ app.get('/admin', createProxyMiddleware({
 }))
 
 app.get('/usage', createProxyMiddleware({
-    target: FRONTEND_URL,
-    changeOrigin: true,
-    pathRewrite: { '^/usage': '/usage' }
+  target: FRONTEND_URL,
+  changeOrigin: true,
+  pathRewrite: { '^/usage': '/usage' }
 }))
 
 app.post('/query', createProxyMiddleware({
@@ -268,17 +268,17 @@ app.post('/query', createProxyMiddleware({
   pathRewrite: { '^/query': '/query' }
 }))
 
-app.delete('/delete', createProxyMiddleware({ 
-    target: UPMS_URL,
-    changeOrigin: true,
-    pathRewrite: { '^/delete': '/delete' }
-  }))
+app.delete('/delete', createProxyMiddleware({
+  target: UPMS_URL,
+  changeOrigin: true,
+  pathRewrite: { '^/delete': '/delete' }
+}))
 
-app.put('/update-usage', createProxyMiddleware({ 
-        target: UPMS_URL,
-        changeOrigin: true,
-        pathRewrite: { '^/update-usage': '/update-usage' }
-      })
+app.put('/update-usage', createProxyMiddleware({
+  target: UPMS_URL,
+  changeOrigin: true,
+  pathRewrite: { '^/update-usage': '/update-usage' }
+})
 )
 
 app.get('/docs', createProxyMiddleware({
@@ -288,17 +288,17 @@ app.get('/docs', createProxyMiddleware({
 }));
 
 app.get('/API/v1/docs/*', createProxyMiddleware({
-    target: DOCS_URL,
-    changeOrigin: true,
-    pathRewrite: (path, req) => path.replace('/API/v1/docs/', '/docs/')
-  }));
-  
+  target: DOCS_URL,
+  changeOrigin: true,
+  pathRewrite: (path, req) => path.replace('/API/v1/docs/', '/docs/')
+}));
+
 
 app.get('/API/v1/docs/', createProxyMiddleware({
-    target: DOCS_URL,
-    changeOrigin: true,
-    pathRewrite: { '^/API/v1/docs/': '/docs' }
-  }));
+  target: DOCS_URL,
+  changeOrigin: true,
+  pathRewrite: { '^/API/v1/docs/': '/docs' }
+}));
 
 // https://isa-singh.azurewebsites.net/API/v1/docs/
 
